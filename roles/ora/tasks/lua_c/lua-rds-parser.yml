@@ -1,0 +1,12 @@
+- name: (lua-rds-parser) compile
+  command: make src/rds_parser.o
+  args:
+    chdir: "{{ package_path }}"
+  environment:
+    LUA_INCLUDE_DIR: "{{ luajit_inc_dir }}"
+    CFLAGS: -g -O2 -Wall
+
+- name: (lua-rds-parser) add to libluajit.a
+  command: "ar r {{ luajit_lib_dir }}/libluajit.a src/rds_parser.o"
+  args:
+    chdir: "{{ package_path }}"

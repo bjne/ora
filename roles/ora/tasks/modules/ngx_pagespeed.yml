@@ -1,0 +1,15 @@
+- name: (pagespeed-module) get psol binary url
+  command: ./scripts/format_binary_url.sh PSOL_BINARY_URL
+  args:
+    chdir: "{{ package_path }}"
+  register: _psol_binary_url
+
+- name: (pagespeed-module) download psol
+  get_url:
+    url: "{{ _psol_binary_url.stdout }}"
+    dest: "{{ archive_path }}/psol-for-pagespeed-{{ package.version }}.tar.gz"
+
+- name: (pagespeed-module) uncompress psol
+  unarchive:
+    src: "{{ archive_path }}/psol-for-pagespeed-{{ package.version }}.tar.gz"
+    dest: "{{ package_path }}"

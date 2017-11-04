@@ -1,0 +1,12 @@
+- name: (lua-redis-parser) compile
+  command: make redis-parser.o
+  args:
+    chdir: "{{ package_path }}"
+  environment:
+    LUA_INCLUDE_DIR: "{{ luajit_inc_dir }}"
+    CFLAGS: -g -O2 -Wall
+
+- name: (lua-redis-parser) add to libluajit.a
+  command: "ar r {{ luajit_lib_dir }}/libluajit.a redis-parser.o"
+  args:
+    chdir: "{{ package_path }}"

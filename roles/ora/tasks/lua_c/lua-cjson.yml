@@ -1,0 +1,11 @@
+- name: (lua-cjson) compile
+  command: make strbuf.o fpconv.o lua_cjson.o
+  args:
+    chdir: "{{ package_path }}"
+  environment:
+    LUA_INCLUDE_DIR: "{{ luajit_inc_dir }}"
+
+- name: (lua-cjson) add to libluajit.a
+  command: "ar r {{ luajit_lib_dir }}/libluajit.a strbuf.o fpconv.o lua_cjson.o"
+  args:
+    chdir: "{{ package_path }}"

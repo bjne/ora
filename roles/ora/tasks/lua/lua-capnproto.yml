@@ -1,0 +1,7 @@
+- set_fact:
+    _bytecode_in_lib: false
+    _lua_prefix: ''
+
+- set_fact:
+    _lua_files:
+    - capnp.lua

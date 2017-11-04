@@ -1,0 +1,9 @@
+- name: (lua-cmsgpack) compile
+  command: "gcc -I{{ luajit_inc_dir }} -O2 -g -ggdb -Wall -pedantic -std=c99 lua_cmsgpack.c -c"
+  args:
+    chdir: "{{ package_path }}"
+
+- name: (lua-cmsgpack) add to libluajit.a
+  command: "ar r {{ luajit_lib_dir }}/libluajit.a lua_cmsgpack.o"
+  args:
+    chdir: "{{ package_path }}"

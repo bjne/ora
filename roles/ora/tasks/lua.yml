@@ -1,0 +1,31 @@
+- include: prepare.yml
+  vars:
+    package_type: lua_c
+  with_items: "{{ nginx.lua_c_packages }}"
+  loop_control:
+    loop_var: package
+
+- name: clear bytecode directory
+  file:
+    path: "{{ nginx_build_directory }}/bytecode"
+    state: "{{ item }}"
+  with_items:
+  - absent
+  - directory
+
+- name: remove libluapackages.a
+  file:
+    path: "{{ luajit_lib_dir }}/libluapackages.a"
+    state: absent
+
+- include: bytecode.yml
+  vars:
+    package_type: lua
+  with_items: "{{ nginx.lua_packages }}"
+  loop_control:
+    loop_var: package
+
+- set_fact:
+    lua_ld_opt: "-L{{ luajit_lib_dir }} -Wl,--whole-archive -lluapackages -Wl,--no-whole-archive"
+  when: bytecode_needed|bool
+

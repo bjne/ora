@@ -1,0 +1,250 @@
+package_name: "{{ package.name }}-{{ package.version }}"
+package_path: "{{ nginx_build_directory }}/{{ package_type }}/{{ package_name }}"
+archive_path: "{{ nginx_build_directory }}/archive"
+package_tgz : "{{ archive_path }}/{{ package.name }}-{{ package.version }}.tar.gz"
+
+nginx:
+  version: "{{ nginx_version }}"
+  cc_opt: "{{ nginx_cc_opt }}"
+  ld_opt: "{{ nginx_ld_opt }}"
+  configure: "{{ nginx_configure }}"
+
+nginx_dependencies:
+- name: luajit
+  github:
+    owner: luajit
+    version: "v{{ nginx_luajit_version }}"
+- name: openssl
+  github:
+    owner: openssl
+    version: "OpenSSL_{{ nginx_openssl_version|replace('.','_') }}"
+  configure:
+  - "with-openssl=../dependencies/openssl-{{ nginx_openssl_version }}"
+- name: pcre
+  tar: https://ftp.pcre.org/pub/pcre/pcre-{{ nginx_pcre_version }}.tar.gz
+  configure:
+  - "with-pcre=../dependencies/pcre-{{ nginx_pcre_version }}"
+  - "with-pcre-jit"
+- name: zlib
+  github:
+    owner: madler
+    version: "v{{ nginx_zlib_version }}"
+  configure:
+  - "with-zlib=../dependencies/zlib-{{ nginx_zlib_version }}"
+- name: libatomic_ops
+  github:
+    owner: ivmai
+    version: "v{{ nginx_libatomic_ops_version }}"
+  configure:
+  - "with-libatomic=../dependencies/libatomic_ops-{{ nginx_libatomic_ops_version }}"
+
+nginx_modules:
+- name: lua-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_nginx_module_version }}"
+- name: stream-lua-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_stream_lua_nginx_module_version }}"
+  configure:
+  - with-stream
+  - with-stream_ssl_module
+  - with-stream_ssl_preread_module
+- name: lua-upstream-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_upstream_nginx_module_version }}"
+- name: srcache-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_srcache_nginx_module_version }}"
+- name: echo-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_echo_nginx_module_version }}"
+- name: xss-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_xss_nginx_module_version }}"
+- name: ngx_devel_kit
+  github:
+    owner: simpl
+    version: "v{{ nginx_ngx_devel_kit_version }}"
+- name: set-misc-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_set_misc_nginx_module_version }}"
+- name: rds-json-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_rds_json_nginx_module_version }}"
+- name: rds-csv-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_rds_csv_nginx_module_version }}"
+- name: headers-more-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_headers_more_nginx_module_version }}"
+- name: drizzle-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_drizzle_nginx_module_version }}"
+- name: array-var-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_array_var_nginx_module_version }}"
+- name: memc-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_memc_nginx_module_version }}"
+- name: form-input-nginx-module
+  github:
+    owner: calio
+    version: "v{{ nginx_form_input_nginx_module_version }}"
+- name: iconv-nginx-module
+  github:
+    owner: calio
+    version: "v{{ nginx_iconv_nginx_module_version }}"
+- name: encrypted-session-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_encrypted_session_nginx_module_version }}"
+- name: ngx_http_redis
+  tar: https://people.freebsd.org/~osa/ngx_http_redis-{{ nginx_ngx_http_redis_version }}.tar.gz
+- name: ngx_postgres
+  github:
+    owner: openresty
+    version: "{{ nginx_ngx_postgres_version }}"
+- name: ngx_coolkit
+  github:
+    owner: FRiCKLE
+    version: "{{ nginx_ngx_coolkit_version }}"
+- name: redis2-nginx-module
+  github:
+    owner: openresty
+    version: "v{{ nginx_redis2_nginx_module_version }}"
+- name: ngx_pagespeed
+  github:
+    owner: pagespeed
+    version: "v{{ nginx_ngx_pagespeed_version }}"
+
+nginx_lua_c_packages:
+- name: lua-cjson
+  github:
+    owner: openresty
+    version: "{{ nginx_lua_cjson_version }}"
+- name: luafilesystem
+  github:
+    owner: keplerproject
+    version: "v{{ nginx_luafilesystem_version|replace('.', '_') }}"
+- name: lpeg
+  tar: http://www.inf.puc-rio.br/~roberto/lpeg/lpeg-{{ nginx_lpeg_version }}.tar.gz
+- name: lua-cmsgpack
+  github:
+    owner: antirez
+    version: "{{ nginx_lua_cmsgpack_version }}"
+- name: lua-rds-parser
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_rds_parser_version }}"
+- name: lua-redis-parser
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_redis_parser_version }}"
+- name: libucl
+  github:
+    owner: vstakhov
+    version: "{{ nginx_libucl_version }}"
+
+nginx_lua_packages:
+- name: lua-resty-core
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_core_version }}"
+- name: lua-resty-string
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_string_version }}"
+- name: lua-resty-lrucache
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_lrucache_version }}"
+- name: lua-resty-dns
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_dns_version }}"
+- name: lua-resty-redis
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_redis_version }}"
+- name: lua-resty-mysql
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_mysql_version }}"
+- name: lua-resty-limit-traffic
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_limit_traffic_version }}"
+- name: lua-resty-upload
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_upload_version }}"
+- name: lua-resty-websocket
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_websocket_version }}"
+- name: lua-resty-lock
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_lock_version }}"
+- name: lua-resty-upstream-healthcheck
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_upstream_healthcheck_version }}"
+- name: lua-resty-memcached
+  github:
+    owner: openresty
+    version: "v{{ nginx_lua_resty_memcached_version }}"
+- name: pgmoon
+  github:
+    owner: leafo
+    version: "v{{ nginx_pgmoon_version }}"
+- name: lua-resty-kyototycoon
+  github:
+    owner: cloudflare
+    version: "{{ nginx_lua_resty_kyototycoon_version }}"
+- name: lua-resty-kyototycoon-binary
+  github:
+    owner: sjnam
+    name: lua-resty-kyototycoon
+    version: "{{ nginx_lua_resty_kyototycoon_binary_version }}"
+- name: lua-capnproto
+  github:
+    owner: cloudflare
+    version: "{{ nginx_lua_capnproto_version }}"
+- name: lua-resty-kafka
+  github:
+    owner: doujiang24
+    version: "v{{ nginx_lua_resty_kafka_version }}"
+- name: lua-resty-logger-socket
+  github:
+    owner: cloudflare
+    version: "v{{ nginx_lua_resty_logger_socket_version }}"
+- name: lua-resty-jwt
+  github:
+    owner: SkyLothar
+    version: "v{{ nginx_lua_resty_jwt_version }}"
+- name: lua-resty-uuid
+  github:
+    owner: bungle
+    version: "v{{ nginx_lua_resty_uuid_version }}"
+- name: lua-resty-jit-uuid
+  github:
+    owner: thibaultcha
+    version: "{{ nginx_lua_resty_jit_uuid_version }}"
+- name: lua-resty-http
+  github:
+    owner: pintsized
+    version: "v{{ nginx_lua_resty_http_version }}"

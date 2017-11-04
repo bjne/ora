@@ -1,0 +1,11 @@
+- name: (lpeg) compile
+  command: make lpvm.o lpcap.o lptree.o lpcode.o lpprint.o
+  args:
+    chdir: "{{ package_path }}"
+  environment:
+    LUADIR: "{{ luajit_inc_dir }}"
+
+- name: (lpeg) add to libluajit.a
+  command: "ar r {{ luajit_lib_dir }}/libluajit.a lpvm.o lpcap.o lptree.o lpcode.o lpprint.o"
+  args:
+    chdir: "{{ package_path }}"

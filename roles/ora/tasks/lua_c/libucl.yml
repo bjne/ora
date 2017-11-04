@@ -1,0 +1,36 @@
+- name: (libucl) autogen && configure && make
+  command: "{{ _libucl_task }}"
+  args:
+    chdir: "{{ package_path }}"
+  with_items:
+  - ./autogen.sh
+  - ./configure --enable-static --enable-regex
+  - make -C src libucl.la
+  loop_control:
+    loop_var: _libucl_task
+
+- name: create .objs directory
+  file:
+    path: "{{ package_path }}/.objs"
+    state: directory
+
+- name: extract objects from archive
+  command: ar vx ../src/.libs/libucl.a
+  args:
+    chdir: "{{ package_path }}/.objs"
+
+- name: list archive objects
+  command: "ar t {{ package_path }}/src/.libs/libucl.a"
+  register: _libucl_objects
+
+- name: (libucl) compile lua_ucl
+  command: gcc -O3 -Wall -I{{ luajit_inc_dir }} -I../include -I../src -I../uthash -c lua_ucl.c
+  args:
+    chdir: "{{ package_path }}/lua"
+
+- name: (libucl) add to libluajit.a
+  command: >-
+    ar r {{ luajit_lib_dir }}/libluajit.a
+    {{ _libucl_objects.stdout_lines|join(' ') }} ../lua/lua_ucl.o
+  args:
+    chdir: "{{ package_path }}/.objs"

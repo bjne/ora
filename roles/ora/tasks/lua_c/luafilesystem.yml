@@ -1,0 +1,11 @@
+- name: (luafilesystem) compile
+  command: make src/lfs.o
+  args:
+    chdir: "{{ package_path }}"
+  environment:
+    LUA_INC: "{{ luajit_inc_dir }}"
+
+- name: (luafilesystem) add to libluajit.a
+  command: "ar r {{ luajit_lib_dir }}/libluajit.a src/lfs.o"
+  args:
+    chdir: "{{ package_path }}"

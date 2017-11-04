@@ -1,0 +1,76 @@
+--- luajit.old/src/lib_init.c	2016-10-12 23:25:51.604022360 +0200
++++ luajit/src/lib_init.c	2016-10-12 23:25:16.552481454 +0200
+@@ -15,6 +15,40 @@
+ 
+ #include "lj_arch.h"
+ 
++#ifdef LUA_CJSON
++LUALIB_API int luaopen_cjson(lua_State *l);
++LUALIB_API int luaopen_cjson_safe(lua_State *l);
++#endif
++
++#ifdef LUA_CMSGPACK
++LUALIB_API int luaopen_cmsgpack(lua_State *l);
++LUALIB_API int luaopen_cmsgpack_safe(lua_State *l);
++#endif
++
++#ifdef LIBUCL
++LUALIB_API int luaopen_ucl(lua_State *l);
++#endif
++
++#ifdef LUA_EJDB
++LUALIB_API int luaopen_luaejdb(lua_State *l);
++#endif
++
++#ifdef LPEG
++LUALIB_API int luaopen_lpeg(lua_State *l);
++#endif
++
++#ifdef LUAFILESYSTEM
++LUALIB_API int luaopen_lfs(lua_State *l);
++#endif
++
++#ifdef LUA_RDS_PARSER
++LUALIB_API int luaopen_rds_parser(lua_State *l);
++#endif
++
++#ifdef LUA_REDIS_PARSER
++LUALIB_API int luaopen_redis_parser(lua_State *l);
++#endif
++
+ static const luaL_Reg lj_lib_load[] = {
+   { "",			luaopen_base },
+   { LUA_LOADLIBNAME,	luaopen_package },
+@@ -33,6 +43,32 @@
+ #if LJ_HASFFI
+   { LUA_FFILIBNAME,	luaopen_ffi },
+ #endif
++#ifdef LUA_CJSON
++  { "cjson",		luaopen_cjson },
++  { "cjson.safe",	luaopen_cjson_safe },
++#endif
++#ifdef LUA_CMSGPACK
++  { "cmsgpack",		luaopen_cmsgpack},
++  { "cmsgpack.safe",	luaopen_cmsgpack_safe },
++#endif
++#ifdef LIBUCL
++  { "ucl",				luaopen_ucl},
++#endif
++#ifdef LUA_EJDB
++  { "luaejdb",			luaopen_luaejdb},
++#endif
++#ifdef LPEG
++  { "lpeg",			luaopen_lpeg},
++#endif
++#ifdef LUAFILESYSTEM
++  { "lfs",				luaopen_lfs},
++#endif
++#ifdef LUA_RDS_PARSER
++  { "rds.parser",		luaopen_rds_parser},
++#endif
++#ifdef LUAREDIS_PARSER
++  { "redis.parser",	luaopen_redis_parser},
++#endif
+   { NULL,		NULL }
+ };
+ 

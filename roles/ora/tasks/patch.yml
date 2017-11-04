@@ -1,0 +1,14 @@
+- name: check for version spesific patches
+  find:
+    path: "{{ role_path }}/patches/{{ package.name }}/{{ package.version }}"
+    pattern: "*.patch"
+  register: _patches
+  delegate_to: localhost
+
+- name: apply patches
+  patch:
+    remote_src: yes
+    src: "{{ item }}"
+    basedir: "{{ package_path }}"
+    strip: 1
+  with_items: "{{ _patches.files|map(attribute='path')|sort }}"

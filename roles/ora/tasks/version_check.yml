@@ -1,0 +1,21 @@
+- name: check for latest release
+  uri:
+    url: https://api.github.com/repos/{{ package.github }}/{{ package.name }}/tags
+    method: GET
+    status: 200
+  register: _tags
+
+- set_fact:
+    _latest_tag: "{{ _tags.json[0].name }}"
+  when:
+  - "{{ 'json' in _tags }}"
+  - _tags.json|length > 0
+
+- fail:
+    msg: |
+      newer release found for {{ package.name }}
+      config:    {{ package.version }}
+      available: {{ _latest_tag }}
+  when: "{{ package.version|version_compare(_latest_tag , '>') }}"
+
+  #  when: not package.version == _latest_tag

@@ -1,0 +1,34 @@
+- name: make luajit
+  command: make clean luajit
+  args:
+    chdir: "{{ package_path }}/src"
+    creates: "{{ nginx_build_directory }}/luajit"
+  register: _luajit
+
+- name: copy luajit to nginx_build_directory
+  command: "cp -r luajit jit {{ nginx_build_directory }}"
+  args:
+    chdir: "{{ package_path }}/src"
+    creates: "{{ package_path }}/src/libluajit.a"
+  when: _luajit|changed
+
+- name: make libluajit.a
+  command: make clean libluajit.a
+  args:
+    chdir: "{{ package_path }}/src"
+  environment:
+    CFLAGS: >-
+      {% for package in nginx.lua_c_packages %}
+      -D{{ package.name|replace('-', '_')|upper }}
+      {% endfor %}
+
+- name: symlink libluajit.a to libluajit-5.1.a
+  file:
+    src: "{{ package_path }}/src/libluajit.a"
+    dest: "{{ package_path }}/src/libluajit-5.1.a"
+    state: link
+
+- name: set luajit_inc_dir and luajit_lib_dir
+  set_fact:
+    luajit_inc_dir: "{{ package_path }}/src"
+    luajit_lib_dir: "{{ package_path }}/src"

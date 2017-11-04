@@ -1,0 +1,84 @@
+#- include: version_check.yml
+#  with_items: "{{ nginx_modules }}"
+#  when: "'github' in package"
+#  loop_control:
+#    loop_var: package
+
+- include: set_facts.yml
+
+- name: install build dependencies
+  apt:
+    pkg: "{{ item }}"
+  with_items:
+  - "{{ nginx_build_dependencies }}"
+
+- name: create directories
+  file:
+    dest: "{{ archive_path }}"
+    state: directory
+
+- include: prepare.yml
+  vars:
+    package_type: dependencies
+  with_items: "{{ nginx.dependencies }}"
+  loop_control:
+    loop_var: package
+
+- include: prepare.yml
+  vars:
+    package_type: modules
+  with_items: "{{ nginx.modules }}"
+  loop_control:
+    loop_var: package
+
+- include: lua.yml
+
+- name: set nginx facts
+  set_fact:
+    package_type: ""
+    package:
+      name: nginx
+      version: "{{ nginx_version }}"
+      github:
+        owner: nginx
+        version: "release-{{ nginx_version }}"
+
+- include: prepare.yml
+
+- name: configure
+  command: >-
+    ./auto/configure {{ ([''] + nginx.configure)|join(' --') }}
+    {% for dependency in nginx.dependencies if 'configure' in dependency %}
+      {{ ([''] + dependency.configure)|join(' --') }}
+    {% endfor %}
+
+    {% for module in nginx.modules %}
+      --add-module=../modules/{{ module.name }}-{{ module.version }}
+      {% if 'configure' in module %}
+        {{ ([''] + module.configure)|join(' --') }}
+      {% endif %}
+    {% endfor %}
+
+    --with-cc-opt='{{ nginx.cc_opt|join(" ")}}'
+    --with-ld-opt='{{ ([lua_ld_opt|default('')] + nginx.ld_opt)|join(" ")}}'
+  args:
+    chdir: "{{ package_path }}"
+  environment:
+    LUAJIT_LIB: "{{ luajit_lib_dir }}"
+    LUAJIT_INC: "{{ luajit_inc_dir }}"
+
+- name: modify nginx version to include build uuid
+  command: sed -i 's/".unknown/".{{ nginx_uuid }}/' {{ package_path }}/src/core/nginx.h
+
+- name: make
+  command: make -j10
+  args:
+    chdir: "{{ package_path }}"
+
+- name: copy binary
+  command: "cp {{ package_path }}/objs/nginx  {{ nginx_build_directory }}"
+
+- name: strip
+  command: strip nginx
+  args:
+    chdir: "{{ nginx_build_directory }}"

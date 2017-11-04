@@ -1,0 +1,12 @@
+- set_fact:
+    _bytecode_in_lib: false
+    _lua_prefix: ''
+
+- name: register lua files for compilation
+  command: find -path "./pgmoon*.lua" -printf "%P\n"
+  register: _lua
+  args:
+    chdir: "{{ package_path }}"
+
+- set_fact:
+    _lua_files: "{{ _lua.stdout_lines }}"

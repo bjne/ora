@@ -1,0 +1,11 @@
+- name: (libatomic_ops) run autogen.sh
+  command: ./autogen.sh
+  args:
+    chdir: "{{ package_path }}"
+
+- name: (libatomic_ops) symlink src/.libs/libatomic_ops.a to src/libatomic_ops.a
+  file:
+    src: "{{ package_path }}/src/.libs/libatomic_ops.a"
+    dest: "{{ package_path }}/src/libatomic_ops.a"
+    state: link
+    force: true

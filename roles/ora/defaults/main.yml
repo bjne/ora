@@ -1,0 +1,150 @@
+nginx_version:                                 "1.13.6"
+nginx_prefix:                                  /opt/nginx
+nginx_build_directory:                         /usr/src/nginx-build
+# dependencies
+nginx_libatomic_ops_version:                   "7.4.8"
+nginx_luajit_version:                          "2.1.0-beta3"
+nginx_openssl_version:                         "1.0.2m"
+nginx_pcre_version:                            "8.41"
+nginx_zlib_version:                            "1.2.11"
+# modules
+nginx_array_var_nginx_module_version:          "0.05"
+nginx_drizzle_nginx_module_version:            "0.1.10"
+nginx_echo_nginx_module_version:               "0.61"
+nginx_encrypted_session_nginx_module_version:  "0.06"
+nginx_form_input_nginx_module_version:         "0.12"
+nginx_headers_more_nginx_module_version:       "0.32"
+nginx_iconv_nginx_module_version:              "0.14"
+nginx_lua_nginx_module_version:                "0.10.11rc3"
+nginx_lua_upstream_nginx_module_version:       "0.07"
+nginx_memc_nginx_module_version:               "0.18"
+nginx_ngx_coolkit_version:                     "0.2rc3"
+nginx_ngx_devel_kit_version:                   "0.3.0"
+nginx_ngx_http_redis_version:                  "0.3.7"
+nginx_ngx_pagespeed_version:                   "1.12.34.3-stable"
+nginx_ngx_postgres_version:                    "1.0"
+nginx_rds_csv_nginx_module_version:            "0.07"
+nginx_rds_json_nginx_module_version:           "0.14"
+nginx_redis2_nginx_module_version:             "0.14"
+nginx_set_misc_nginx_module_version:           "0.31"
+nginx_srcache_nginx_module_version:            "0.31"
+nginx_stream_lua_nginx_module_version:         "0.0.3"
+nginx_xss_nginx_module_version:                "0.05"
+# lua c extentions
+nginx_libucl_version:                          "8171869"
+nginx_lpeg_version:                            "1.0.1"
+nginx_lua_cjson_version:                       "2.1.0.5"
+nginx_lua_cmsgpack_version:                    "0.4.0"
+nginx_lua_rds_parser_version:                  "0.06"
+nginx_lua_redis_parser_version:                "0.13"
+nginx_luafilesystem_version:                   "1.7.0.2"
+# lua packages
+nginx_lua_capnproto_version:                   "4f09730"
+nginx_lua_resty_core_version:                  "0.1.13rc2"
+nginx_lua_resty_dns_version:                   "0.19"
+nginx_lua_resty_http_version:                  "0.11"
+nginx_lua_resty_jit_uuid_version:              "0.0.6"
+nginx_lua_resty_jwt_version:                   "0.1.11"
+nginx_lua_resty_kafka_version:                 "0.06"
+nginx_lua_resty_kyototycoon_binary_version:    "c856a30"
+nginx_lua_resty_kyototycoon_version:           "d044fbd"
+nginx_lua_resty_limit_traffic_version:         "0.05rc2"
+nginx_lua_resty_lock_version:                  "0.07"
+nginx_lua_resty_logger_socket_version:         "0.1"
+nginx_lua_resty_lrucache_version:              "0.07"
+nginx_lua_resty_memcached_version:             "0.14"
+nginx_lua_resty_mysql_version:                 "0.20"
+nginx_lua_resty_redis_version:                 "0.26"
+nginx_lua_resty_string_version:                "0.10"
+nginx_lua_resty_upload_version:                "0.10"
+nginx_lua_resty_upstream_healthcheck_version:  "0.05"
+nginx_lua_resty_uuid_version:                  "1.1"
+nginx_lua_resty_websocket_version:             "0.06"
+nginx_pgmoon_version:                          "1.8.0"
+#
+#
+# dependencies (should stay enabled)
+nginx_libatomic_ops_enabled:                   true
+nginx_luajit_enabled:                          true
+nginx_openssl_enabled:                         true
+nginx_pcre_enabled:                            true
+nginx_zlib_enabled:                            true
+# modules
+nginx_array_var_nginx_module_enabled:          true
+nginx_drizzle_nginx_module_enabled:            false
+nginx_echo_nginx_module_enabled:               false
+nginx_encrypted_session_nginx_module_enabled:  true
+nginx_form_input_nginx_module_enabled:         true
+nginx_headers_more_nginx_module_enabled:       true
+nginx_iconv_nginx_module_enabled:              true
+nginx_lua_nginx_module_enabled:                true
+nginx_lua_upstream_nginx_module_enabled:       true
+nginx_memc_nginx_module_enabled:               false
+nginx_ngx_coolkit_enabled:                     true
+nginx_ngx_devel_kit_enabled:                   true
+nginx_ngx_http_redis_enabled:                  true
+nginx_ngx_pagespeed_enabled:                   true
+# TODO: loads a shitload of libraries
+nginx_ngx_postgres_enabled:                    false
+nginx_rds_csv_nginx_module_enabled:            false
+nginx_rds_json_nginx_module_enabled:           true
+nginx_redis2_nginx_module_enabled:             true
+nginx_set_misc_nginx_module_enabled:           true
+nginx_srcache_nginx_module_enabled:            true
+nginx_stream_lua_nginx_module_enabled:         true
+nginx_xss_nginx_module_enabled:                true
+# lua c packages
+nginx_libucl_enabled:                          true
+nginx_lpeg_enabled:                            true
+nginx_lua_cjson_enabled:                       true
+nginx_lua_cmsgpack_enabled:                    true
+nginx_lua_rds_parser_enabled:                  true
+nginx_lua_redis_parser_enabled:                true
+nginx_luafilesystem_enabled:                   true
+# lua packages
+nginx_lua_capnproto_enabled:                   true
+nginx_lua_resty_core_enabled:                  true
+nginx_lua_resty_dns_enabled:                   true
+nginx_lua_resty_http_enabled:                  true
+nginx_lua_resty_jit_uuid_enabled:              true
+nginx_lua_resty_jwt_enabled:                   true
+nginx_lua_resty_kafka_enabled:                 true
+nginx_lua_resty_kyototycoon_binary_enabled:    true
+nginx_lua_resty_kyototycoon_enabled:           true
+nginx_lua_resty_limit_traffic_enabled:         true
+nginx_lua_resty_lock_enabled:                  true
+nginx_lua_resty_logger_socket_enabled:         true
+nginx_lua_resty_lrucache_enabled:              true
+nginx_lua_resty_memcached_enabled:             true
+nginx_lua_resty_mysql_enabled:                 true
+nginx_lua_resty_redis_enabled:                 true
+nginx_lua_resty_string_enabled:                true
+nginx_lua_resty_upload_enabled:                true
+nginx_lua_resty_upstream_healthcheck_enabled:  true
+nginx_lua_resty_uuid_enabled:                  true
+nginx_lua_resty_websocket_enabled:             true
+nginx_pgmoon_enabled:                          true
+
+nginx_build_dependencies:
+- git
+- build-essential
+nginx_cc_opt:
+- "-O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2"
+- "-fexceptions -fstack-protector-strong --param=ssp-buffer-size=4"
+- "-grecord-gcc-switches -m64 -mtune=generic"
+- "-DTCP_FASTOPEN=23"
+nginx_ld_opt:
+- "-Wl,-z,relro -Wl,-E"
+#- "-Wl,--whole-archive -lssl -lcrypto -Wl,--no-whole-archive" # TODO: causes linking with system libs
+nginx_configure:
+- prefix={{ nginx_prefix }}
+- with-http_ssl_module
+- with-http_v2_module
+- with-http_gunzip_module
+- with-http_gzip_static_module
+
+# TODO?
+#- ver=0.20rc1
+#- openresty/resty-cli/tarball/v$ver
+#- ver=0.0.4rc1
+#- openresty/opm/tarball/v$ver

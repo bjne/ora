@@ -1,0 +1,45 @@
+- name: extract package version and enabled
+  set_fact:
+    nginx: >-
+      {{
+        nginx|combine({
+          item.0.type: (nginx|default({}))[item.0.type]|default([])|
+            union([item.1|combine({
+            'version': vars['nginx_' + item.1.name|replace('-','_') + '_version'],
+        })])})
+      }}
+  when: "{{ vars['nginx_' + item.1.name|replace('-','_') + '_enabled'] }}"
+  with_subelements:
+  - >-
+    {{
+      [
+        { 'type': 'dependencies', 'data': nginx_dependencies },
+        { 'type': 'dependencies', 'data': nginx_custom_dependencies|default([]) },
+        { 'type': 'modules', 'data': nginx_modules },
+        { 'type': 'modules', 'data': nginx_custom_modules|default([]) },
+        { 'type': 'lua_packages', 'data': nginx_lua_packages },
+        { 'type': 'lua_packages', 'data': nginx_custom_lua_packages|default([]) },
+        { 'type': 'lua_c_packages', 'data': nginx_lua_c_packages },
+        { 'type': 'lua_c_packages', 'data': nginx_custom_lua_c_packages|default([]) },
+        { 'type': 'configure', 'data': nginx_custom_configure|default([]) },
+        { 'type': 'cc_opt', 'data': nginx_custom_cc_opt|default([]) },
+        { 'type': 'ld_opt', 'data': nginx_custom_ld_opt|default([]) },
+      ]
+    }}
+  - data
+
+- name: generate unique version based on current settings
+  set_fact:
+    nginx_uuid: "{{ nginx|to_json|to_uuid }}"
+
+- name: check current version
+  command: "{{ nginx_build_directory }}/nginx -v"
+  register: _current_nginx_uuid
+  failed_when: false
+
+- fail:
+    msg: nginx not modified, pass -e force=true to force a build
+  when:
+  - "'stderr' in _current_nginx_uuid"
+  - nginx_uuid in _current_nginx_uuid.stderr
+  - "{{ not force|default(false) }}"

@@ -1,0 +1,42 @@
+#- name: git clone
+#  git:
+#    repo: "{{ package.repo }}"
+#    version: "{{ package.version }}"
+#    dest: "{{ package_path }}"
+#  when: package.repo|default(false)
+
+- name: download from github/archive
+  get_url:
+    url: "https://github.com/{{ package.github.owner }}/{{ package.github.name|default(package.name) }}/archive/{{ package.github.version }}.tar.gz"
+    dest: "{{ package_tgz }}"
+  when:
+  - "'github' in package"
+
+- name: download tar
+  get_url:
+    url: "{{ package.tar }}"
+    dest: "{{ package_tgz }}"
+  when:
+  - "'tar' in package"
+
+- name: create destination directory
+  file:
+    path: "{{ package_path }}"
+    state: directory
+
+- name: uncompress archive
+  unarchive:
+    src: "{{ package_tgz }}"
+    dest: "{{ package_path }}"
+    extra_opts:
+    - --strip-components=1
+
+- name: patch package
+  include: patch.yml
+
+- include: "{{ item }}"
+  with_first_found:
+    - files:
+      - "{{ package_type }}/{{ package_name }}.yml"
+      - "{{ package_type }}/{{ package.name }}.yml"
+      skip: true
